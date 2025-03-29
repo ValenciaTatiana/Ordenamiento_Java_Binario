@@ -1,6 +1,7 @@
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -86,8 +87,7 @@ public class FrmOrdenamiento extends JFrame {
         tbOrdenamiento.add(btnBuscar);
         tbOrdenamiento.add(txtBuscar);
 
-        JScrollPane spDocumentos=new JScrollPane(tblDocumentos);
-
+        JScrollPane spDocumentos = new JScrollPane(tblDocumentos);
 
         getContentPane().add(tbOrdenamiento, BorderLayout.NORTH);
         getContentPane().add(spDocumentos, BorderLayout.CENTER);
@@ -100,7 +100,14 @@ public class FrmOrdenamiento extends JFrame {
     }
 
     private void btnOrdenarBurbujaClick(ActionEvent evt) {
-
+        if (cmbCriterio.getSelectedIndex() >= 0) {
+            Util.iniciarCronometro();
+            Documento.ordenarBurbuja(cmbCriterio.getSelectedIndex());
+            txtTiempo.setText(Util.getTextoTiempoCronometro());
+            Documento.mostrar(tblDocumentos);
+        } else {
+            JOptionPane.showMessageDialog(null, "Elija el criterio de ordenamiento");
+        }
     }
 
     private void btnOrdenarRapidoClick(ActionEvent evt) {

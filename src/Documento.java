@@ -35,6 +35,10 @@ public class Documento {
         return documento;
     }
 
+    public String getNombreCompleto() {
+        return apellido1 + " " + apellido2 + " " + nombre;
+    }
+
     // ****** Atributos y metodos estaticos ******
 
     private static List<Documento> documentos = new ArrayList();
@@ -78,6 +82,36 @@ public class Documento {
         }
         DefaultTableModel dtm = new DefaultTableModel(datos, encabezados);
         tbl.setModel(dtm);
+    }
+
+    private static boolean esMayor(Documento d1, Documento d2, int criterio) {
+        if (criterio == 0) {
+            // ordenar primero por Nombre Completo y luego por Tipo de Documento
+            return (d1.getNombreCompleto().compareTo(d2.getNombreCompleto()) > 0) ||
+                    (d1.getNombreCompleto().equals(d2.getNombreCompleto())
+                            && d1.getDocumento().compareTo(d2.getDocumento()) > 0);
+        } else {
+            // ordenar primero por Tipo de Documento y luego por Nombre Completo
+            return (d1.getDocumento().compareTo(d2.getDocumento()) > 0) ||
+                    (d1.getDocumento().equals(d2.getDocumento())
+                            && d1.getNombreCompleto().compareTo(d2.getNombreCompleto()) > 0);
+        }
+    }
+
+    private static void intercambiar(int origen, int destino) {
+        Documento temporal = documentos.get(origen);
+        documentos.set(origen, documentos.get(destino));
+        documentos.set(destino, temporal);
+    }
+
+    public static void ordenarBurbuja(int criterio) {
+        for (int i = 0; i < documentos.size() - 1; i++) {
+            for (int j = i + 1; j < documentos.size(); j++) {
+                if (esMayor(documentos.get(i), documentos.get(j), criterio)) {
+                    intercambiar(i, j);
+                }
+            }
+        }
     }
 
 }
