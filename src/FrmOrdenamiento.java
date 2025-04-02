@@ -111,7 +111,14 @@ public class FrmOrdenamiento extends JFrame {
     }
 
     private void btnOrdenarRapidoClick(ActionEvent evt) {
-
+        if (cmbCriterio.getSelectedIndex() >= 0) {
+            Util.iniciarCronometro();
+            Documento.ordenarRapido(0, Documento.getTamaño() - 1, cmbCriterio.getSelectedIndex());
+            txtTiempo.setText(Util.getTextoTiempoCronometro());
+            Documento.mostrar(tblDocumentos);
+        } else {
+            JOptionPane.showMessageDialog(null, "Elija el criterio de ordenamiento");
+        }
     }
 
     private void btnOrdenarInsercionClick(ActionEvent evt) {

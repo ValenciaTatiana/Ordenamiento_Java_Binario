@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class Archivo {
 
@@ -30,8 +32,8 @@ public class Archivo {
                  * manipular secuencia de caracteres. La clase File ofrece
                  * funcionalidad para operar con archivos
                  */
-                FileReader fr = new FileReader(f);
-                return new BufferedReader(fr);
+                var isr=new InputStreamReader(new FileInputStream(nombreArchivo), StandardCharsets.UTF_8);
+                return new BufferedReader(isr);
             } catch (IOException e) {
                 /*
                  * Sucedió un error que se captura mediante la clase IOException

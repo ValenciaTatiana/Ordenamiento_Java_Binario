@@ -44,6 +44,11 @@ public class Documento {
     private static List<Documento> documentos = new ArrayList();
     private static String[] encabezados;
 
+
+    public static int getTamaño(){
+        return documentos.size();
+    }
+
     public static void desdeArchivo(String nombreArchivo) {
         documentos.clear();
         BufferedReader br = Archivo.abrirArchivo(nombreArchivo);
@@ -112,6 +117,36 @@ public class Documento {
                 }
             }
         }
+    }
+
+    private static int localizarPivote(int inicio, int fin, int criterio) {
+        int pivote = inicio;
+        Documento dPivote = documentos.get(pivote);
+
+        for (int i = inicio + 1; i <= fin; i++) {
+            if (esMayor(dPivote, documentos.get(i), criterio)) {
+                pivote++;
+                // if (i != pivote) {
+                intercambiar(i, pivote);
+                // }
+            }
+        }
+        if (inicio != pivote) {
+            intercambiar(inicio, pivote);
+        }
+        return pivote;
+    }
+
+    public static void ordenarRapido(int inicio, int fin, int criterio) {
+        // punto de finalizacion
+        if (inicio >= fin) {
+            return;
+        }
+
+        // casos recursivos
+        int pivote = localizarPivote(inicio, fin, criterio);
+        ordenarRapido(inicio, pivote - 1, criterio); // ordenar los menores a la posicion PIVOTE
+        ordenarRapido(pivote + 1, fin, criterio); // ordenar los mayores a la posicion PIVOTE
     }
 
 }
