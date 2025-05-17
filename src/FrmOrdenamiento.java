@@ -10,6 +10,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.WindowConstants;
 
+import servicios.ServicioDocumento;
+import servicios.Util;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -95,16 +98,20 @@ public class FrmOrdenamiento extends JFrame {
         String nombreArchivo = System.getProperty("user.dir")
                 + "/src/datos/Datos.csv";
 
-        Documento.desdeArchivo(nombreArchivo);
-        Documento.mostrar(tblDocumentos);
+        ServicioDocumento.desdeArchivo(nombreArchivo);
+
+        var arbol = ServicioDocumento.getArbol();
+        arbol.recorrerInOrden();
+
+        ServicioDocumento.mostrar(tblDocumentos);
     }
 
     private void btnOrdenarBurbujaClick(ActionEvent evt) {
         if (cmbCriterio.getSelectedIndex() >= 0) {
             Util.iniciarCronometro();
-            Documento.ordenarBurbuja(cmbCriterio.getSelectedIndex());
+            ServicioDocumento.ordenarBurbuja(cmbCriterio.getSelectedIndex());
             txtTiempo.setText(Util.getTextoTiempoCronometro());
-            Documento.mostrar(tblDocumentos);
+            ServicioDocumento.mostrar(tblDocumentos);
         } else {
             JOptionPane.showMessageDialog(null, "Elija el criterio de ordenamiento");
         }
@@ -113,9 +120,9 @@ public class FrmOrdenamiento extends JFrame {
     private void btnOrdenarRapidoClick(ActionEvent evt) {
         if (cmbCriterio.getSelectedIndex() >= 0) {
             Util.iniciarCronometro();
-            Documento.ordenarRapido(0, Documento.getTamaño() - 1, cmbCriterio.getSelectedIndex());
+            ServicioDocumento.ordenarRapido(0, ServicioDocumento.getTamaño() - 1, cmbCriterio.getSelectedIndex());
             txtTiempo.setText(Util.getTextoTiempoCronometro());
-            Documento.mostrar(tblDocumentos);
+            ServicioDocumento.mostrar(tblDocumentos);
         } else {
             JOptionPane.showMessageDialog(null, "Elija el criterio de ordenamiento");
         }

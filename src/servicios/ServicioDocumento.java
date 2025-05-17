@@ -1,3 +1,5 @@
+package servicios;
+
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -5,42 +7,10 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class Documento {
+import entidades.Documento;
 
-    private String apellido1;
-    private String apellido2;
-    private String nombre;
-    private String documento;
-
-    public Documento(String apellido1, String apellido2, String nombre, String documento) {
-        this.apellido1 = apellido1;
-        this.apellido2 = apellido2;
-        this.nombre = nombre;
-        this.documento = documento;
-    }
-
-    public String getApellido1() {
-        return apellido1;
-    }
-
-    public String getApellido2() {
-        return apellido2;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-
-    public String getNombreCompleto() {
-        return apellido1 + " " + apellido2 + " " + nombre;
-    }
-
-    // ****** Atributos y metodos estaticos ******
-
+public class ServicioDocumento {
+    
     private static List<Documento> documentos = new ArrayList();
     private static String[] encabezados;
 
@@ -89,7 +59,7 @@ public class Documento {
         tbl.setModel(dtm);
     }
 
-    private static boolean esMayor(Documento d1, Documento d2, int criterio) {
+    public static boolean esMayor(Documento d1, Documento d2, int criterio) {
         if (criterio == 0) {
             // ordenar primero por Nombre Completo y luego por Tipo de Documento
             return (d1.getNombreCompleto().compareTo(d2.getNombreCompleto()) > 0) ||
@@ -147,6 +117,14 @@ public class Documento {
         int pivote = localizarPivote(inicio, fin, criterio);
         ordenarRapido(inicio, pivote - 1, criterio); // ordenar los menores a la posicion PIVOTE
         ordenarRapido(pivote + 1, fin, criterio); // ordenar los mayores a la posicion PIVOTE
+    }
+
+    public static Arbol getArbol(){
+        Arbol arbol=new Arbol();
+        for(var documento:documentos){
+            arbol.agregar(new Nodo(documento));
+        }
+        return arbol;
     }
 
 }
