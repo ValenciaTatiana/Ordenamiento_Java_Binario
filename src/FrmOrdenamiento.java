@@ -10,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.WindowConstants;
 
+import servicios.Arbol;
 import servicios.ServicioDocumento;
 import servicios.Util;
 
@@ -98,12 +99,15 @@ public class FrmOrdenamiento extends JFrame {
         String nombreArchivo = System.getProperty("user.dir")
                 + "/src/datos/Datos.csv";
 
-        ServicioDocumento.desdeArchivo(nombreArchivo);
+        //ServicioDocumento.desdeArchivo(nombreArchivo);
+        //ServicioDocumento.mostrar(tblDocumentos);
 
-        var arbol = ServicioDocumento.getArbol();
-        arbol.recorrerInOrden();
+        Arbol arbol = new Arbol();
+        arbol.desdeArchivo(nombreArchivo);
+        //arbol.recorrerInOrden();
+        arbol.mostrar(tblDocumentos);
 
-        ServicioDocumento.mostrar(tblDocumentos);
+        
     }
 
     private void btnOrdenarBurbujaClick(ActionEvent evt) {
