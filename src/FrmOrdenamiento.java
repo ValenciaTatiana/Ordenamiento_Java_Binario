@@ -139,5 +139,4 @@ public class FrmOrdenamiento extends JFrame {
     private void btnBuscar(ActionEvent evt) {
 
     }
-
 }
