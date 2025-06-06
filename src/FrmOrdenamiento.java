@@ -9,14 +9,18 @@ import javax.swing.JToolBar;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
 
+import entidades.Documento;
 import servicios.Arbol;
+import servicios.Nodo;
 import servicios.ServicioDocumento;
 import servicios.Util;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class FrmOrdenamiento extends JFrame {
 
@@ -96,8 +100,7 @@ public class FrmOrdenamiento extends JFrame {
         getContentPane().add(tbOrdenamiento, BorderLayout.NORTH);
         getContentPane().add(spDocumentos, BorderLayout.CENTER);
 
-        String nombreArchivo = System.getProperty("user.dir")
-                + "/src/datos/Datos.csv";
+        String nombreArchivo = System.getProperty("user.dir") + "/src/datos/Datos.csv";
 
         //ServicioDocumento.desdeArchivo(nombreArchivo);
         //ServicioDocumento.mostrar(tblDocumentos);
@@ -106,8 +109,6 @@ public class FrmOrdenamiento extends JFrame {
         arbol.desdeArchivo(nombreArchivo);
         //arbol.recorrerInOrden();
         arbol.mostrar(tblDocumentos);
-
-        
     }
 
     private void btnOrdenarBurbujaClick(ActionEvent evt) {
@@ -137,6 +138,39 @@ public class FrmOrdenamiento extends JFrame {
     }
 
     private void btnBuscar(ActionEvent evt) {
-
+        String textoBusqueda = txtBuscar.getText().trim();
+        if (textoBusqueda.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un criterio de búsqueda", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        Arbol arbol = new Arbol();
+        String nombreArchivo = System.getProperty("user.dir") + "/src/datos/Datos.csv";
+        arbol.desdeArchivo(nombreArchivo);
+        
+        List<Nodo> resultados = arbol.buscarUsuarios(textoBusqueda);
+        
+        if (!resultados.isEmpty()) {
+            String[][] datos = new String[resultados.size()][ServicioDocumento.getEncabezados().length];
+            
+            for (int i = 0; i < resultados.size(); i++) {
+                Nodo nodo = resultados.get(i);
+                datos[i][0] = nodo.getDocumento().getApellido1();
+                datos[i][1] = nodo.getDocumento().getApellido2();
+                datos[i][2] = nodo.getDocumento().getNombre();
+                datos[i][3] = nodo.getDocumento().getDocumento();
+            }
+            
+            DefaultTableModel dtm = new DefaultTableModel(datos, ServicioDocumento.getEncabezados());
+            tblDocumentos.setModel(dtm);
+            
+            JOptionPane.showMessageDialog(this, 
+                "Se encontraron " + resultados.size() + " resultados exactos", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "No se encontraron resultados exactos para: " + textoBusqueda, 
+                "Búsqueda sin resultados", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }

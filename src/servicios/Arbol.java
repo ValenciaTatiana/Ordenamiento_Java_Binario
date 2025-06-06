@@ -1,11 +1,12 @@
 package servicios;
 
 import java.io.BufferedReader;
-
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import entidades.Documento;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Arbol {
     private Nodo raiz;
@@ -34,11 +35,11 @@ public class Arbol {
             raiz = nodo;
             totalNodos++;
         } else {
-            // no insertar si el documento es igual
+            // No insertar si el documento es igual
             if (nodo.getDocumento().equals(actual.getDocumento())) {
                 return;
             } else if (ServicioDocumento.esMayor(nodo.getDocumento(), actual.getDocumento(), criterio)) {
-                // agregar a la derecha
+                // Agregar a la derecha
                 if (actual.derecha == null) {
                     actual.derecha = nodo;
                     totalNodos++;
@@ -46,7 +47,7 @@ public class Arbol {
                     agregar(actual.derecha, nodo);
                 }
             } else {
-                // agregar a la izquierda
+                // Agregar a la izquierda
                 if (actual.izquierda == null) {
                     actual.izquierda = nodo;
                     totalNodos++;
@@ -118,4 +119,36 @@ public class Arbol {
         return fila;
     }
 
+    public List<Nodo> buscarUsuarios(String criterio) {
+        List<Nodo> resultados = new ArrayList<>();
+        buscarUsuariosRecursivo(raiz, criterio.toLowerCase(), resultados);
+        return resultados;
+    }
+
+    private void buscarUsuariosRecursivo(Nodo actual, String criterio, List<Nodo> resultados) {
+        if (actual != null) {
+            // Buscar en el subárbol izquierdo primero
+            buscarUsuariosRecursivo(actual.izquierda, criterio, resultados);
+            
+            // Verificar si el nodo actual coincide EXACTAMENTE con el criterio
+            Documento doc = actual.getDocumento();
+            String nombreCompleto = (doc.getApellido1() + " " + doc.getApellido2() + " " + doc.getNombre()).toLowerCase();
+            String apellido1 = doc.getApellido1().toLowerCase();
+            String apellido2 = doc.getApellido2().toLowerCase();
+            String nombre = doc.getNombre().toLowerCase();
+            String documento = doc.getDocumento().toLowerCase();
+            
+            // Comparación exacta
+            if (nombreCompleto.equals(criterio) || 
+                apellido1.equals(criterio) ||
+                apellido2.equals(criterio) ||
+                nombre.equals(criterio) ||
+                documento.equals(criterio)) {
+                resultados.add(actual);
+            }
+            
+            // Buscar en el subárbol derecho
+            buscarUsuariosRecursivo(actual.derecha, criterio, resultados);
+        }
+    }
 }
